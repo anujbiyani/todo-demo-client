@@ -4,9 +4,9 @@
  * @flow
  */
 
-import { AppRegistry, StyleSheet, Text, View } from 'react-native';
+import { AppRegistry, StyleSheet, Text, View } from 'react-native'
 
-import React from 'react';
+import React from 'react'
 
 export interface Props { }
 export interface State { }

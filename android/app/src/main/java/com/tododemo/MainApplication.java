@@ -16,7 +16,7 @@ public class MainApplication extends Application implements ReactApplication {
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
     protected String getJSMainModuleName() {
-      return "artifacts/index.android";
+      return "artifacts/app/index.android";
     }
 
     @Override

@@ -1,5 +1,5 @@
 import 'react-native'
-import Index from './index.ios'
+import Index from '../app/index.android'
 import React from 'react'
 import renderer from 'react-test-renderer'
 
