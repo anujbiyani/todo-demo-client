@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
 import { ListView, ListViewDataSource, StyleSheet, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 
 import { TodoList } from '../todo-list/todo-list';
-import * as todoListsActions from './todo-lists.actions';
+import { setTodoLists } from './todo-lists.actions';
+import { selectTodoList } from '../todo-list/todo-list.actions';
+import { bindActionCreators } from 'redux';
+import { getSelectedTodoList } from './todo-lists.reducer';
 
 export interface Props {
   todoLists: TodoList[];
   setTodoLists: any;
+  selectTodoList: any;
 }
 
 export interface State { }
 
 class TodoListsComponent extends Component<Props, State> {
   private dataSource: ListViewDataSource;
-
-  private static navigateToList(id: number) {
-    console.log(id);
-  }
 
   componentWillMount(): void {
     this.createDataSource(this.props);
@@ -52,6 +53,7 @@ class TodoListsComponent extends Component<Props, State> {
     });
 
     this.dataSource = ds.cloneWithRows(todoLists);
+    this.renderRow = this.renderRow.bind(this);
   }
 
   private renderRow({ id, name }: TodoList) {
@@ -60,13 +62,19 @@ class TodoListsComponent extends Component<Props, State> {
     return (
       <View key={id}
             style={container}>
-        <TouchableOpacity style={touchable} onPress={() => TodoListsComponent.navigateToList(id)}>
+        <TouchableOpacity style={touchable} onPress={() => this.navigateToList(id)}>
           <Text style={text}>
             {name}
           </Text>
         </TouchableOpacity>
       </View>
     );
+  }
+
+  private navigateToList(id: number) {
+    this.props.selectTodoList(id);
+
+    Actions.todoList({ title: getSelectedTodoList(this.props.todoLists, id).name });
   }
 }
 
@@ -76,11 +84,18 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, todoListsActions)(TodoListsComponent);
+function mapDispatchToProps(dispatch) {
+  return {
+    setTodoLists: bindActionCreators(setTodoLists, dispatch),
+    selectTodoList: bindActionCreators(selectTodoList, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoListsComponent);
 
 const styles: any = StyleSheet.create({
   text: {
-    fontSize: 15,
+    fontSize: 15
   } as TextStyle,
 
   container: {

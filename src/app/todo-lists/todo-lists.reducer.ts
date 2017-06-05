@@ -14,3 +14,7 @@ export default (state: State = initialState, action) => {
       return state;
   }
 };
+
+export function getSelectedTodoList(state: State, id: number) {
+  return state.filter(todoList => todoList.id === id)[0];
+}
